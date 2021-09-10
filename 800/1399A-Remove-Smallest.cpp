@@ -1,47 +1,46 @@
 #include <iostream>
-#include <list>
 
 int abs(int value) {
 	return (value < 0) ?  -value : value;
 }
 
 int main() {
-	int t;
-	int n;
-	int e;
-	std::list<int> a;
+	int t, n, a[101];
 	std::cin >> t;
-	for(int i = 0; i != t; i++) {
+	for(int k = 0; k != t; k++) {
 		std::cin >> n;
-		a.clear();
-		for(int j = 0; j != n; j++) {
-			std::cin >> e;
-			a.push_back(e);
+		for(int i = 0; i != n; i++) {
+			a[i] = 0;
+			std::cin >> a[i];
 		}
 
-		for(std::list<int>::iterator it = a.begin(); it != std::prev(a.end()); ) {
-			bool removed = false;
-			for(std::list<int>::iterator jt = std::next(it); jt != a.end(); jt++) {
-				if(abs(*it - *jt) <= 1) {
-					if(*it > *jt) {
-						if(std::next(it) == jt) {
-							it = a.erase(jt);
-							removed = true;
-						} else {
-							a.erase(jt);
-						}
-					} else {
-						it = a.erase(it);
-						removed = true;
-					}
-					break;
+		for(int i = 0; i != (n - 1); i++) {
+			for(int j = i + 1; j != n; j++) {
+				if(a[j] < a[i]) {
+					int temp = a[i];
+					a[i] = a[j];
+					a[j] = temp;
 				}
 			}
-			if(!removed) {
-				it++;
+		}
+
+		for(int i = 0; i != (n - 1);) {
+			if(abs(a[i + 1] - a[i]) <= 1) {
+				int pos;
+				if(a[i + 1] > a[i]) {
+					pos = i;
+				} else {
+					pos = i + 1;
+				}
+				for(int l = pos; l != (n - 1); l++) {
+					a[l] = a[l + 1];
+				}
+				n--;
+			} else {
+				i++;
 			}
 		}
-		if(a.size() == 1) {
+		if(n == 1) {
 			std::cout << "YES" << std::endl;
 		} else {
 			std::cout << "NO" << std::endl;
